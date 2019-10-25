@@ -44,17 +44,21 @@ class MainMenuForm(QMainWindow):
             WHERE request_creator == {}
             """.format(self.user[0]))
         self.dgvRequests.setRowCount(len(data))
-        self.dgvRequests.setColumnCount(3)
-        self.dgvRequests.setHorizontalHeaderLabels(["Название", "Кто сделал?", "Сделано?"])
+        self.dgvRequests.setColumnCount(4)
+        self.dgvRequests.setHorizontalHeaderLabels(["Название", "Кто сделал?","Номер телефона", "Сделано?"])
         for row in data:
             inx = data.index(row)
             self.dgvRequests.setItem(inx, 0, QTableWidgetItem(row[1]))
-            who_done = get_data("""
-            SELECT * from users
+            who_done, his_phonenumber = get_data("""
+            SELECT name, phonenumber from users
             WHERE id = {}
-            """.format(row[2]))[0][3]
+            """.format(row[2]))[0]
             self.dgvRequests.setItem(inx, 1, QTableWidgetItem(who_done))
-            self.dgvRequests.setItem(inx, 2, QTableWidgetItem(row[3]))
+            self.dgvRequests.setItem(inx, 2, QTableWidgetItem(str(his_phonenumber)))
+            statement = "Да"
+            if row[3] == "False":
+                statement = "Нет"
+            self.dgvRequests.setItem(inx, 3, QTableWidgetItem(statement))
 
 
 

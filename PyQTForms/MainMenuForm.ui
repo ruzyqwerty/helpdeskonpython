@@ -22,7 +22,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Главное окно</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="dgvRequests">
@@ -47,9 +47,28 @@
      <number>1</number>
     </property>
     <property name="columnCount">
-     <number>3</number>
+     <number>4</number>
     </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>146</number>
+    </attribute>
+    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderStretchLastSection">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>23</number>
+    </attribute>
     <row/>
+    <column/>
     <column/>
     <column/>
     <column/>
