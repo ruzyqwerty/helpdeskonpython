@@ -13,4 +13,4 @@ def set_data(text):
     connector = sqlite3.connect(DB_NAME)
     cursor = connector.cursor()
     cursor.execute(text)
-    connector.close()
+    connector.commit()

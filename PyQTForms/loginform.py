@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog
-from dbconnector import set_data, get_data
+from dbconnector import get_data
 
 
 class LoginForm(QDialog):

@@ -1,8 +1,9 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 from PyQTForms.loginform import LoginForm
+from PyQTForms.newrequestform import NewRequestForm
 from os.path import exists
-from dbconnector import get_data
+from dbconnector import get_data, set_data
 
 PATH = "auto_login.txt"
 
@@ -22,6 +23,8 @@ class MainMenuForm(QMainWindow):
             login_form = LoginForm(self)
             login_form.exec_()
 
+        self.btnAddRequest.clicked.connect(self.OpenNewRequestForm)
+
     def Login(self, user):
         if user is not None:
             self.lblName.setText("Привет, {} - {}!".format(user[4], user[3]))
@@ -32,6 +35,18 @@ class MainMenuForm(QMainWindow):
             self.UpdateDataGridView()
         else:
             self.deleteLater()
+
+    def OpenNewRequestForm(self):
+        new_request_form = NewRequestForm(self)
+        new_request_form.exec_()
+
+    def AddRequest(self, request):
+        print(request)
+        set_data("""
+        INSERT INTO requests(name, request_creator, done)
+        VALUES('{}', {}, 'False')
+        """.format(request, self.user[0]))
+        self.UpdateDataGridView()
 
     def UpdateDataGridView(self):
         if self.user[4] == "admin":
