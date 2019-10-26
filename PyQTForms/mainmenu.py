@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox
 from PyQTForms.loginform import LoginForm
 from PyQTForms.newrequestform import NewRequestForm
 from os.path import exists
@@ -24,6 +24,7 @@ class MainMenuForm(QMainWindow):
             login_form.exec_()
 
         self.btnAddRequest.clicked.connect(self.OpenNewRequestForm)
+        self.btnDeleteRequest.clicked.connect(self.DeleteRequest)
 
     def Login(self, user):
         if user is not None:
@@ -41,12 +42,48 @@ class MainMenuForm(QMainWindow):
         new_request_form.exec_()
 
     def AddRequest(self, request):
-        print(request)
         set_data("""
         INSERT INTO requests(name, request_creator, done)
         VALUES('{}', {}, 'False')
         """.format(request, self.user[0]))
         self.UpdateDataGridView()
+
+    def DeleteRequest(self):
+        request = self.dgvRequests.selectedItems()
+        if len(request) > 0:
+            name = request[0].text()
+            phonenumber = request[2].text()
+            done = request[3].text()
+            if done == "Нет":
+                done = "False"
+            else:
+                done = "True"
+            all_requests = get_data("""
+            SELECT * from requests
+            WHERE name = "{}"
+            AND
+            done = "{}"
+            AND request_creator in (
+            SELECT id from users
+            WHERE phonenumber = {})
+            """.format(name, done, phonenumber))
+            if len(all_requests) > 1:
+                msg = QMessageBox(self)
+                msg.setIcon(QMessageBox.Warning)
+
+                msg.setText("В базе данных нашлось больше одного запроса с таким именнем, будет удалён первый из них.")
+                msg.setWindowTitle("Внимание!")
+                msg.setStandardButtons(QMessageBox.Ok)
+
+                retval = msg.exec_()
+
+            request = all_requests[0]
+
+            set_data("""
+            DELETE from requests
+            WHERE id = {}
+            """.format(request[0]))
+            self.UpdateDataGridView()
 
     def UpdateDataGridView(self):
         titles = []
