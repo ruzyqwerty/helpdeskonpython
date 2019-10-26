@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>120</height>
+    <width>264</width>
+    <height>174</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>279</width>
-    <height>120</height>
+    <width>5555</width>
+    <height>5555</height>
    </size>
   </property>
   <property name="font">
@@ -28,7 +28,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
+     <y>130</y>
      <width>111</width>
      <height>31</height>
     </rect>
@@ -46,8 +46,8 @@
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>80</y>
+     <x>140</x>
+     <y>130</y>
      <width>111</width>
      <height>31</height>
     </rect>
@@ -66,7 +66,7 @@
     <rect>
      <x>20</x>
      <y>30</y>
-     <width>241</width>
+     <width>231</width>
      <height>20</height>
     </rect>
    </property>
@@ -93,8 +93,8 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>60</y>
-     <width>241</width>
+     <y>110</y>
+     <width>231</width>
      <height>16</height>
     </rect>
    </property>
@@ -105,6 +105,34 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QDateTimeEdit" name="dteDeadline">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>231</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblDeadline">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>241</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Дедлайн</string>
    </property>
   </widget>
  </widget>

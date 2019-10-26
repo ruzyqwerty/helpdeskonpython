@@ -47,13 +47,13 @@
      <number>1</number>
     </property>
     <property name="columnCount">
-     <number>4</number>
+     <number>5</number>
     </property>
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>146</number>
+     <number>116</number>
     </attribute>
     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
      <bool>true</bool>
@@ -68,6 +68,7 @@
      <number>23</number>
     </attribute>
     <row/>
+    <column/>
     <column/>
     <column/>
     <column/>

@@ -41,11 +41,11 @@ class MainMenuForm(QMainWindow):
         new_request_form = NewRequestForm(self)
         new_request_form.exec_()
 
-    def AddRequest(self, request):
+    def AddRequest(self, request, time):
         set_data("""
-        INSERT INTO requests(name, request_creator, done)
-        VALUES('{}', {}, 'False')
-        """.format(request, self.user[0]))
+        INSERT INTO requests(name, request_creator, deadline, done)
+        VALUES('{}', {}, '{}', 'False')
+        """.format(request, self.user[0], time))
         self.UpdateDataGridView()
 
     def DeleteRequest(self):
@@ -53,7 +53,8 @@ class MainMenuForm(QMainWindow):
         if len(request) > 0:
             name = request[0].text()
             phonenumber = request[2].text()
-            done = request[3].text()
+            deadline = request[3].text()
+            done = request[4].text()
             if done == "Нет":
                 done = "False"
             else:
@@ -63,10 +64,12 @@ class MainMenuForm(QMainWindow):
             WHERE name = "{}"
             AND
             done = "{}"
+            AND
+            deadline = "{}"
             AND request_creator in (
             SELECT id from users
             WHERE phonenumber = {})
-            """.format(name, done, phonenumber))
+            """.format(name, done, deadline, phonenumber))
             if len(all_requests) > 1:
                 msg = QMessageBox(self)
                 msg.setIcon(QMessageBox.Warning)
@@ -88,7 +91,7 @@ class MainMenuForm(QMainWindow):
     def UpdateDataGridView(self):
         titles = []
         if self.user[4] == "admin":
-            titles = ["Название", "Кто сделал?", "Номер телефона", "Сделано?"]
+            titles = ["Название", "Кто сделал?", "Номер телефона", "Дедлайн", "Сделано?"]
             data = get_data("""
             SELECT * from requests
             """)
@@ -97,7 +100,7 @@ class MainMenuForm(QMainWindow):
             SELECT * from requests
             WHERE request_creator == {}
             """.format(self.user[0]))
-            titles = ["Название", "Сделано?"]
+            titles = ["Название", "Дедлайн", "Сделано?"]
         self.dgvRequests.setRowCount(len(data))
         self.dgvRequests.setColumnCount(len(titles))
         self.dgvRequests.setHorizontalHeaderLabels(titles)
@@ -112,8 +115,9 @@ class MainMenuForm(QMainWindow):
                 self.dgvRequests.setItem(inx, 1, QTableWidgetItem(who_done))
                 self.dgvRequests.setItem(inx, 2, QTableWidgetItem(str(his_phonenumber)))
             statement = "Да"
-            if row[3] == "False":
+            if row[4] == "False":
                 statement = "Нет"
+            self.dgvRequests.setItem(inx, len(titles) - 2, QTableWidgetItem(row[3]))
             self.dgvRequests.setItem(inx, len(titles) - 1, QTableWidgetItem(statement))
 
 
