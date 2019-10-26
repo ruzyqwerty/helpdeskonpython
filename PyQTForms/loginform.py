@@ -16,7 +16,7 @@ class LoginForm(QDialog):
         login = self.leLogin.text()
         password = self.lePassword.text()
         if login == '' or password == '':
-            pass #TODO: Вывести ошибку, что поля не заполнены
+            self.lblErrors.setText("Не все поля заполнены.")
         else:
             users = get_data("""
             SELECT * from users
@@ -25,7 +25,7 @@ class LoginForm(QDialog):
             password = '{}'
             """.format(login, password))
             if len(users) == 0:
-                pass #TODO: Вывести ошибку, что нет такого пользователя
+                self.lblErrors.setText("Не верный логин или пароль.")
             else:
                 self.parentform.Login(users[0])
                 self.close()

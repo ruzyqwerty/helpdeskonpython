@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>279</width>
-    <height>100</height>
+    <height>120</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>279</width>
+    <height>120</height>
+   </size>
   </property>
   <property name="font">
    <font>
@@ -22,7 +28,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>60</y>
+     <y>80</y>
      <width>111</width>
      <height>31</height>
     </rect>
@@ -41,7 +47,7 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>60</y>
+     <y>80</y>
      <width>111</width>
      <height>31</height>
     </rect>
@@ -70,12 +76,35 @@
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>111</width>
+     <width>241</width>
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Название запроса</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblErrors">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>241</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

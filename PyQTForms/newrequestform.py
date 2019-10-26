@@ -14,7 +14,7 @@ class NewRequestForm(QDialog):
     def AddRequest(self):
         name = self.leRequestName.text()
         if name == "":
-            pass  # TODO: сделать вывод ошибки, что поле пустое
+            self.lblErrors.setText("Поле пустое, введите название запроса.")
         else:
             self.parentform.AddRequest(name)
             self.close()
