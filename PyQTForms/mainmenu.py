@@ -49,7 +49,9 @@ class MainMenuForm(QMainWindow):
         self.UpdateDataGridView()
 
     def UpdateDataGridView(self):
+        titles = []
         if self.user[4] == "admin":
+            titles = ["Название", "Кто сделал?", "Номер телефона", "Сделано?"]
             data = get_data("""
             SELECT * from requests
             """)
@@ -58,9 +60,10 @@ class MainMenuForm(QMainWindow):
             SELECT * from requests
             WHERE request_creator == {}
             """.format(self.user[0]))
+            titles = ["Название", "Сделано?"]
         self.dgvRequests.setRowCount(len(data))
-        self.dgvRequests.setColumnCount(4)
-        self.dgvRequests.setHorizontalHeaderLabels(["Название", "Кто сделал?","Номер телефона", "Сделано?"])
+        self.dgvRequests.setColumnCount(len(titles))
+        self.dgvRequests.setHorizontalHeaderLabels(titles)
         for row in data:
             inx = data.index(row)
             self.dgvRequests.setItem(inx, 0, QTableWidgetItem(row[1]))
@@ -68,12 +71,13 @@ class MainMenuForm(QMainWindow):
             SELECT name, phonenumber from users
             WHERE id = {}
             """.format(row[2]))[0]
-            self.dgvRequests.setItem(inx, 1, QTableWidgetItem(who_done))
-            self.dgvRequests.setItem(inx, 2, QTableWidgetItem(str(his_phonenumber)))
+            if self.user[4] == "admin":
+                self.dgvRequests.setItem(inx, 1, QTableWidgetItem(who_done))
+                self.dgvRequests.setItem(inx, 2, QTableWidgetItem(str(his_phonenumber)))
             statement = "Да"
             if row[3] == "False":
                 statement = "Нет"
-            self.dgvRequests.setItem(inx, 3, QTableWidgetItem(statement))
+            self.dgvRequests.setItem(inx, len(titles) - 1, QTableWidgetItem(statement))
 
 
 
