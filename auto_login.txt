@@ -1,1 +1,1 @@
-1;admin;notnull;Ruslan;admin;89053500088;
+6;admin2;1234;bot1;admin;123;

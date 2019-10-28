@@ -64,7 +64,6 @@ class MainMenuForm(QMainWindow):
             WHERE name = "{}"
             AND
             done = "{}"
-            AND
             deadline = "{}"
             AND request_creator in (
             SELECT id from users

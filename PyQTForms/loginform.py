@@ -1,5 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog
+from PyQTForms.registrationform import RegistrationForm
 from dbconnector import get_data
 
 
@@ -11,6 +12,15 @@ class LoginForm(QDialog):
 
         self.btnCancel.clicked.connect(self.Close)
         self.btnLogin.clicked.connect(self.Login)
+        self.btnSignUp.clicked.connect(self.SignUp)
+
+    def SignUp(self):
+        registration_form = RegistrationForm(self)
+        registration_form.exec_()
+
+    def SingUpEnd(self, login, password):
+        self.leLogin.setText(login)
+        self.lePassword.setText(password)
 
     def Login(self):
         login = self.leLogin.text()
