@@ -23,9 +23,12 @@ class MainMenuForm(QMainWindow):
             login_form.exec_()
 
         self.btnAddRequest.clicked.connect(self.OpenNewRequestForm)
+        self.menuAdd.triggered.connect(self.OpenNewRequestForm)
         self.btnDeleteRequest.clicked.connect(self.DeleteRequest)
+        self.menuDelete.triggered.connect(self.DeleteRequest)
         self.btnUpdate.clicked.connect(self.UpdateDataGridView)
         self.btnDone.clicked.connect(self.Done)
+        self.menuDone.triggered.connect(self.Done)
 
     def Login(self, user):
         if user is not None:
@@ -35,7 +38,8 @@ class MainMenuForm(QMainWindow):
                 for element in self.user:
                     auto_login.write(str(element) + ";")
             self.UpdateDataGridView()
-            self.btnDone.setEnabled(True)
+            if self.user[4] == "admin":
+                self.btnDone.setEnabled(True)
         else:
             self.deleteLater()
 
@@ -51,12 +55,19 @@ class MainMenuForm(QMainWindow):
         self.UpdateDataGridView()
 
     def DeleteRequest(self):
+        self.UpdateDataGridView()
         request = self.dgvRequests.selectedItems()
         if len(request) > 0:
-            name = request[0].text()
-            phonenumber = request[2].text()
-            deadline = request[3].text()
-            done = request[4].text()
+            if self.user[4] == "user":
+                name = request[0].text()
+                phonenumber = self.user[5]
+                deadline = request[1].text()
+                done = request[2].text()
+            else:
+                name = request[0].text()
+                phonenumber = request[2].text()
+                deadline = request[3].text()
+                done = request[4].text()
             if done == "Нет":
                 done = "False"
             else:
@@ -72,29 +83,19 @@ class MainMenuForm(QMainWindow):
             SELECT id from users
             WHERE phonenumber = '{}')
             """.format(name, done, deadline, phonenumber))
-            if len(all_requests) > 1:
-                msg = QMessageBox(self)
-                msg.setIcon(QMessageBox.Warning)
-                msg.setText("В базе данных нашлось больше одного запроса с таким именнем, будет удалён первый из них.")
-                msg.setWindowTitle("Внимание!")
-                msg.setStandardButtons(QMessageBox.Ok)
-
-                retval = msg.exec_()
-            if len(all_requests) == 1:
+            if len(all_requests) > 0:
+                if len(all_requests) > 1:
+                    self.SendMessege("В базе данных нашлось больше одного запроса с таким именнем, будет удалён первый из них.")
                 request = all_requests[0]
                 set_data("""
                 DELETE from requests
                 WHERE id = {}
                 """.format(request[0]))
             else:
-                msg = QMessageBox(self)
-                msg.setIcon(QMessageBox.Critical)
-                msg.setText("Не было найдено таких заявок.")
-                msg.setWindowTitle("Ошибка!")
-                msg.setStandardButtons(QMessageBox.Ok)
-
-                retval = msg.exec_()
+                self.SendMessege("Не было найдено таких заявок.", "Ошибка!")
             self.UpdateDataGridView()
+        else:
+            self.SendMessege("Не выбран запрос для удаления.")
 
     def UpdateDataGridView(self):
         titles = []
@@ -129,6 +130,7 @@ class MainMenuForm(QMainWindow):
             self.dgvRequests.setItem(inx, len(titles) - 1, QTableWidgetItem(statement))
 
     def Done(self):
+        self.UpdateDataGridView()
         request = self.dgvRequests.selectedItems()
         if len(request) > 0:
             name = request[0].text()
@@ -151,13 +153,7 @@ class MainMenuForm(QMainWindow):
             WHERE phonenumber = '{}')
             """.format(name, done, deadline, phonenumber))
             if len(all_requests) > 1:
-                msg = QMessageBox(self)
-                msg.setIcon(QMessageBox.Warning)
-                msg.setText("В базе данных нашлось больше одного запроса с таким именнем, будет изменён первый из них.")
-                msg.setWindowTitle("Внимание!")
-                msg.setStandardButtons(QMessageBox.Ok)
-
-                retval = msg.exec_()
+                self.SendMessege("В базе данных нашлось больше одного запроса с таким именнем, будет изменён первый из них.")
             if len(all_requests) == 1:
                 request = all_requests[0]
                 set_data("""
@@ -166,12 +162,20 @@ class MainMenuForm(QMainWindow):
                 WHERE id = {}
                 """.format(request[0]))
             else:
-                msg = QMessageBox(self)
-                msg.setIcon(QMessageBox.Critical)
-                msg.setText("Не было найдено таких заявок.")
-                msg.setWindowTitle("Ошибка!")
-                msg.setStandardButtons(QMessageBox.Ok)
-
-                retval = msg.exec_()
+                self.SendMessege("Не было найдено таких заявок.", "Ошибка!")
             self.UpdateDataGridView()
+        else:
+            self.SendMessege("Не найдена заявка для выполнения.")
+
+    def SendMessege(self, text, title="Внимание."):
+        msg = QMessageBox(self)
+        if title.startswith("Ошибка"):
+            msg.setIcon(QMessageBox.Critical)
+        else:
+            msg.setIcon(QMessageBox.Warning)
+        msg.setText(text)
+        msg.setWindowTitle(title)
+        msg.setStandardButtons(QMessageBox.Ok)
+
+        retval = msg.exec_()
 
