@@ -4,6 +4,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
 from PyQTForms.loginform import LoginForm
 from PyQTForms.newrequestform import NewRequestForm
+from PyQTForms.aboutprogramform import AboutProgramForm
 from os.path import exists
 from dbconnector import get_data, set_data
 from datetime import datetime
@@ -44,6 +45,11 @@ class MainMenuForm(QMainWindow):
         self.menuDone.triggered.connect(self.Done)
         self.menuExit.triggered.connect(self.SingOut)
         self.leSearch.textChanged.connect(self.UpdateDataGridView)
+        self.menuAbout.triggered.connect(self.OpenAboutProgram)
+
+    def OpenAboutProgram(self):
+        self.about_program_form = AboutProgramForm(self)
+        self.about_program_form.show()
 
     def Test(self, number):
         print("Work in {}".format(number))

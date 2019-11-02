@@ -22,7 +22,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Главное окно</string>
+   <string>Helpdesk - Главное окно</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="dgvRequests">
@@ -188,10 +188,22 @@
     <addaction name="menuDelete"/>
     <addaction name="menuDone"/>
    </widget>
-   <widget class="QMenu" name="menuAbout">
+   <widget class="QMenu" name="menuAbouta">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="font">
+     <font>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Об программе</string>
     </property>
+    <addaction name="menuAbout"/>
    </widget>
    <widget class="QMenu" name="menuSingOut">
     <property name="title">
@@ -200,8 +212,8 @@
     <addaction name="menuExit"/>
    </widget>
    <addaction name="menuRequests"/>
-   <addaction name="menuAbout"/>
    <addaction name="menuSingOut"/>
+   <addaction name="menuAbouta"/>
   </widget>
   <action name="menuAdd">
    <property name="text">
@@ -226,6 +238,11 @@
   <action name="menuExit">
    <property name="text">
     <string>Выйти</string>
+   </property>
+  </action>
+  <action name="menuAbout">
+   <property name="text">
+    <string>Почитать об программе</string>
    </property>
   </action>
  </widget>
