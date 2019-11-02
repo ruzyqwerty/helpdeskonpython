@@ -41,7 +41,7 @@
      <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="sortingEnabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="rowCount">
      <number>1</number>
@@ -56,7 +56,7 @@
      <number>116</number>
     </attribute>
     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-     <bool>true</bool>
+     <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderStretchLastSection">
      <bool>false</bool>
@@ -145,6 +145,16 @@
     </property>
     <property name="text">
      <string>Сделано!</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leSearch">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>60</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
     </property>
    </widget>
   </widget>

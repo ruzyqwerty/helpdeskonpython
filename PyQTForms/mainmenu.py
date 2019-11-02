@@ -30,8 +30,10 @@ class MainMenuForm(QMainWindow):
             login_form = LoginForm(self)
             login_form.exec_()
 
-        # self.timerforupdatedb = QTimer(self)
-
+        self.timerforupdatedb = QTimer(self)
+        self.timerforupdatedb.setInterval(5000)
+        self.timerforupdatedb.timeout.connect(self.UpdateDataGridView)
+        self.timerforupdatedb.start()
 
         self.btnAddRequest.clicked.connect(self.OpenNewRequestForm)
         self.menuAdd.triggered.connect(self.OpenNewRequestForm)
@@ -43,7 +45,6 @@ class MainMenuForm(QMainWindow):
         self.menuExit.triggered.connect(self.SingOut)
 
     def SingOut(self):
-        print("removed")
         remove(PATH)
         self.SendMessege("Выход из аккаунта - {}".format(self.user[3]))
         if exists(PATH):
@@ -166,7 +167,7 @@ class MainMenuForm(QMainWindow):
 
     def Done(self):
         self.UpdateDataGridView()
-        if self.user[5] == "admin":
+        if self.user[4] == "admin":
             request = self.dgvRequests.selectedItems()
             if len(request) > 0:
                 name = request[0].text()
