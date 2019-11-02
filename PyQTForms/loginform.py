@@ -25,7 +25,11 @@ class LoginForm(QDialog):
 
     def Login(self):
         login = self.leLogin.text()
+        login = "".join(c for c in login if c not in ("'"))
+        self.leLogin.setText(login)
         password = self.lePassword.text()
+        password = "".join(c for c in password if c not in ("'"))
+        self.lePassword.setText(password)
         if login == '' or password == '':
             self.lblErrors.setText("Не все поля заполнены.")
         else:

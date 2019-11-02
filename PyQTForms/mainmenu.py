@@ -43,6 +43,10 @@ class MainMenuForm(QMainWindow):
         self.btnDone.clicked.connect(self.Done)
         self.menuDone.triggered.connect(self.Done)
         self.menuExit.triggered.connect(self.SingOut)
+        self.leSearch.textChanged.connect(self.UpdateDataGridView)
+
+    def Test(self, number):
+        print("Work in {}".format(number))
 
     def SingOut(self):
         remove(PATH)
@@ -128,9 +132,18 @@ class MainMenuForm(QMainWindow):
         titles = []
         if self.user[4] == "admin":
             titles = ["Название", "Кто сделал?", "Номер телефона", "Дедлайн", "Сделано?"]
-            data = get_data("""
-            SELECT * from requests
-            """)
+            if self.leSearch.text() == "":
+                data = get_data("""
+                SELECT * from requests
+                """)
+            else:
+                search = self.leSearch.text()
+                search = "".join(c for c in search if c not in ("'"))
+                self.leSearch.setText(search)
+                data = get_data("""
+                SELECT * from requests
+                WHERE name like '%{}%'
+                """.format(search))
         else:
             data = get_data("""
             SELECT * from requests

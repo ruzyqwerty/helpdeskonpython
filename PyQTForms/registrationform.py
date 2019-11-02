@@ -16,9 +16,17 @@ class RegistrationForm(QDialog):
 
     def AddUser(self):
         login = self.leLogin.text()
+        login = "".join(c for c in login if c not in ("'"))
+        self.leLogin.setText(login)
         password = self.lePassword.text()
+        password = "".join(c for c in password if c not in ("'"))
+        self.lePassword.setText(password)
         name = self.leName.text()
+        name = "".join(c for c in name if c not in ("'"))
+        self.leName.setText(name)
         phonenumber = self.lePhonenumber.text()
+        phonenumber = "".join(c for c in phonenumber if c not in ("'"))
+        self.lePhonenumber.setText(phonenumber)
         if login == "" or password == "" or name == "" or phonenumber == "":
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Warning)

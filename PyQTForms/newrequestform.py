@@ -15,6 +15,8 @@ class NewRequestForm(QDialog):
 
     def AddRequest(self):
         name = self.leRequestName.text()
+        name = "".join(c for c in name if c not in ("'"))
+        self.leRequestName.setText(name)
         time = self.dteDeadline.text()
         if name == "":
             self.lblErrors.setText("Поле пустое, введите название запроса.")
