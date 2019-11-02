@@ -8,6 +8,7 @@ class LoginForm(QDialog):
     def __init__(self, *args):
         super().__init__()
         self.parentform = args[0]
+        self.GoodExit = False
         uic.loadUi('PyQTForms/LoginForm.ui', self)
 
         self.btnCancel.clicked.connect(self.Close)
@@ -38,7 +39,13 @@ class LoginForm(QDialog):
                 self.lblErrors.setText("Не верный логин или пароль.")
             else:
                 self.parentform.Login(users[0])
+                self.GoodExit = True
                 self.close()
+
+    def closeEvent(self, event):
+        if not self.GoodExit:
+            self.parentform.Login(None)
+        self.close()
 
     def Close(self):
         self.parentform.Login(None)

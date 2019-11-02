@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDateTime
 
 
 class NewRequestForm(QDialog):
@@ -9,7 +9,7 @@ class NewRequestForm(QDialog):
         self.parentform = args[0]
         uic.loadUi('PyQTForms/NewRequestForm.ui', self)
 
-        self.dteDeadline.setMinimumDate(QDate.currentDate())
+        self.dteDeadline.setMinimumDateTime(QDateTime.currentDateTime())
         self.btnCancel.clicked.connect(self.close)
         self.btnAdd.clicked.connect(self.AddRequest)
 

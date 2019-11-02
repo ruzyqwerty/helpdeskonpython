@@ -1,11 +1,19 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox
+from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QTimer
 from PyQTForms.loginform import LoginForm
 from PyQTForms.newrequestform import NewRequestForm
 from os.path import exists
 from dbconnector import get_data, set_data
+from datetime import datetime
+from os import remove
 
 PATH = "auto_login.lgl"
+COLORS = {
+    "DONE": (192, 192, 192),
+    "DEADLINE": (220, 20, 60)
+}
 
 class MainMenuForm(QMainWindow):
     def __init__(self):
@@ -22,6 +30,9 @@ class MainMenuForm(QMainWindow):
             login_form = LoginForm(self)
             login_form.exec_()
 
+        # self.timerforupdatedb = QTimer(self)
+
+
         self.btnAddRequest.clicked.connect(self.OpenNewRequestForm)
         self.menuAdd.triggered.connect(self.OpenNewRequestForm)
         self.btnDeleteRequest.clicked.connect(self.DeleteRequest)
@@ -29,6 +40,21 @@ class MainMenuForm(QMainWindow):
         self.btnUpdate.clicked.connect(self.UpdateDataGridView)
         self.btnDone.clicked.connect(self.Done)
         self.menuDone.triggered.connect(self.Done)
+        self.menuExit.triggered.connect(self.SingOut)
+
+    def SingOut(self):
+        print("removed")
+        remove(PATH)
+        self.SendMessege("Выход из аккаунта - {}".format(self.user[3]))
+        if exists(PATH):
+            with open(PATH, mode="r") as auto_login:
+                data = auto_login.read()
+                data = data.split(';')
+                data.pop(-1)
+                self.Login(data)
+        else:
+            login_form = LoginForm(self)
+            login_form.exec_()
 
     def Login(self, user):
         if user is not None:
@@ -128,44 +154,54 @@ class MainMenuForm(QMainWindow):
                 statement = "Нет"
             self.dgvRequests.setItem(inx, len(titles) - 2, QTableWidgetItem(row[3]))
             self.dgvRequests.setItem(inx, len(titles) - 1, QTableWidgetItem(statement))
+            format = '%d.%m.%Y %H:%M'
+            time = datetime.strptime(row[3], format)
+            now_time = datetime.now()
+            if now_time > time and statement == "Нет":
+                for j in range(len(titles)):
+                    self.dgvRequests.item(inx, j).setBackground(QColor(*COLORS["DEADLINE"]))
+            elif statement == "Да":
+                for j in range(len(titles)):
+                    self.dgvRequests.item(inx, j).setBackground(QColor(*COLORS["DONE"]))
 
     def Done(self):
         self.UpdateDataGridView()
-        request = self.dgvRequests.selectedItems()
-        if len(request) > 0:
-            name = request[0].text()
-            phonenumber = request[2].text()
-            deadline = request[3].text()
-            done = request[4].text()
-            if done == "Нет":
-                done = "False"
+        if self.user[5] == "admin":
+            request = self.dgvRequests.selectedItems()
+            if len(request) > 0:
+                name = request[0].text()
+                phonenumber = request[2].text()
+                deadline = request[3].text()
+                done = request[4].text()
+                if done == "Нет":
+                    done = "False"
+                else:
+                    done = "True"
+                all_requests = get_data("""
+                SELECT * from requests
+                WHERE name = '{}'
+                AND
+                done = '{}'
+                AND
+                deadline = '{}'
+                AND request_creator in (
+                SELECT id from users
+                WHERE phonenumber = '{}')
+                """.format(name, done, deadline, phonenumber))
+                if len(all_requests) > 1:
+                    self.SendMessege("В базе данных нашлось больше одного запроса с таким именнем, будет изменён первый из них.")
+                if len(all_requests) == 1:
+                    request = all_requests[0]
+                    set_data("""
+                    UPDATE requests
+                    SET done = 'True'
+                    WHERE id = {}
+                    """.format(request[0]))
+                else:
+                    self.SendMessege("Не было найдено таких заявок.", "Ошибка!")
+                self.UpdateDataGridView()
             else:
-                done = "True"
-            all_requests = get_data("""
-            SELECT * from requests
-            WHERE name = '{}'
-            AND
-            done = '{}'
-            AND
-            deadline = '{}'
-            AND request_creator in (
-            SELECT id from users
-            WHERE phonenumber = '{}')
-            """.format(name, done, deadline, phonenumber))
-            if len(all_requests) > 1:
-                self.SendMessege("В базе данных нашлось больше одного запроса с таким именнем, будет изменён первый из них.")
-            if len(all_requests) == 1:
-                request = all_requests[0]
-                set_data("""
-                UPDATE requests
-                SET done = 'True'
-                WHERE id = {}
-                """.format(request[0]))
-            else:
-                self.SendMessege("Не было найдено таких заявок.", "Ошибка!")
-            self.UpdateDataGridView()
-        else:
-            self.SendMessege("Не найдена заявка для выполнения.")
+                self.SendMessege("Не найдена заявка для выполнения.")
 
     def SendMessege(self, text, title="Внимание."):
         msg = QMessageBox(self)
