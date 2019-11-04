@@ -1,12 +1,13 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox
+from PyQTForms._adminagreementform import Ui_Dialog
 
 
-class AdminAgreementForm(QDialog):
+class AdminAgreementForm(QDialog, Ui_Dialog):
     def __init__(self, *args):
         super().__init__()
+        self.setupUi(self)
         self.parentform = args[0]
-        uic.loadUi('PyQTForms/AdminAgreementForm.ui', self)
 
         self.btnCancel.clicked.connect(self.close)
         self.btnAccept.clicked.connect(self.AcceptKey)

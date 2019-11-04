@@ -9,6 +9,7 @@ from os.path import exists
 from dbconnector import get_data, set_data
 from datetime import datetime
 from os import remove
+from PyQTForms._mainmenuform import Ui_MainWindow
 
 PATH = "auto_login.lgl"
 COLORS = {
@@ -16,11 +17,12 @@ COLORS = {
     "DEADLINE": (220, 20, 60)
 }
 
-class MainMenuForm(QMainWindow):
+class MainMenuForm(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        self.setupUi(self)
+
         self.user = None
-        uic.loadUi('PyQTForms/MainMenuForm.ui', self)
         if exists(PATH):
             with open(PATH, mode="r") as auto_login:
                 data = auto_login.read()
@@ -77,6 +79,8 @@ class MainMenuForm(QMainWindow):
             self.UpdateDataGridView()
             if self.user[4] == "admin":
                 self.btnDone.setEnabled(True)
+            else:
+                self.btnDone.setEnabled(False)
         else:
             self.deleteLater()
 

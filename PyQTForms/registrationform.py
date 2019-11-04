@@ -2,15 +2,16 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox
 from PyQTForms.adminagreementform import AdminAgreementForm
 from dbconnector import set_data, get_data
+from PyQTForms._registrationform import Ui_Dialog
 
 
-class RegistrationForm(QDialog):
+class RegistrationForm(QDialog, Ui_Dialog):
     def __init__(self, *args):
         super().__init__()
+        self.setupUi(self)
+
         self.parentform = args[0]
         self.adminpermission = False
-        uic.loadUi('PyQTForms/RegistrationForm.ui', self)
-
         self.btnCancel.clicked.connect(self.close)
         self.btnAdd.clicked.connect(self.AddUser)
 

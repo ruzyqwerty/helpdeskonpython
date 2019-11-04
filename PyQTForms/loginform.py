@@ -2,14 +2,16 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQTForms.registrationform import RegistrationForm
 from dbconnector import get_data
+from PyQTForms._loginform import Ui_Dialog
 
 
-class LoginForm(QDialog):
+class LoginForm(QDialog, Ui_Dialog):
     def __init__(self, *args):
         super().__init__()
+        self.setupUi(self)
+
         self.parentform = args[0]
         self.GoodExit = False
-        uic.loadUi('PyQTForms/LoginForm.ui', self)
 
         self.btnCancel.clicked.connect(self.Close)
         self.btnLogin.clicked.connect(self.Login)
