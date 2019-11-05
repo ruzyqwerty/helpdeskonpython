@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import image_rc
 
 
 class Ui_Form(object):
@@ -18,7 +19,7 @@ class Ui_Form(object):
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(0, 0, 542, 410))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap(":/about_program/542_410_another.png"))
+        self.label.setPixmap(QtGui.QPixmap(":/image/image.png"))
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(120, 290, 281, 91))
@@ -40,4 +41,3 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Helpdesk - О программе"))
         self.label_2.setText(_translate("Form", "Если вы видите этот текст, значит мне было лень тут что-то писать."))
-import image_rc

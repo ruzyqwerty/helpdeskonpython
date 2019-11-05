@@ -40,10 +40,14 @@ class RegistrationForm(QDialog, Ui_Dialog):
             SELECT * from users
             WHERE phonenumber == '{}'
             """.format(phonenumber))
-            if len(result) > 0:
+            another = get_data("""
+            SELECT * from users
+            WHERE login == '{}'
+            """.format(login))
+            if len(result) + len(another) > 0:
                 msg = QMessageBox(self)
                 msg.setIcon(QMessageBox.Critical)
-                msg.setText("Пользователь с таким номером телефона существует!")
+                msg.setText("Пользователь с таким номером телефона или логином существует!")
                 msg.setWindowTitle("Ошибка!")
                 msg.setStandardButtons(QMessageBox.Ok)
                 retval = msg.exec_()
